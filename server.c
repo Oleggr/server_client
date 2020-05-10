@@ -1,65 +1,102 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
+#include <errno.h>
 #include <unistd.h>
-#include <fcntl.h>
+#include <netdb.h> // for getnameinfo()
 
-#include <netinet/tcp.h>
-#include <sys/socket.h>
+// Usual socket headers
 #include <sys/types.h>
+#include <sys/socket.h>
 #include <netinet/in.h>
-#include <netdb.h>
 
-int socket_connect(char *host, in_port_t port){
-    struct hostent *hp;
-    struct sockaddr_in addr;
-    int on = 1, sock;     
+#include <arpa/inet.h>
 
-    if((hp = gethostbyname(host)) == NULL){
-        herror("gethostbyname");
-        exit(1);
+#define SIZE 1024
+#define BACKLOG 10  // Passed to listen()
+
+void report(struct sockaddr_in *serverAddress);
+
+void setHttpHeader(char httpHeader[])
+{
+    // File object to return
+    FILE *htmlData = fopen("index.html", "r");
+
+    char line[100];
+    char responseData[8000];
+    while (fgets(line, 100, htmlData) != 0) {
+        strcat(responseData, line);
     }
-    copy(hp->h_addr, &addr.sin_addr, hp->h_length);
-    addr.sin_port = htons(port);
-    addr.sin_family = AF_INET;
-    sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-    setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (const char *)&on, sizeof(int));
-
-    if(sock == -1){
-        perror("setsockopt");
-        exit(1);
-    }
-    
-    if(connect(sock, (struct sockaddr *)&addr, sizeof(struct sockaddr_in)) == -1){
-        perror("connect");
-        exit(1);
-
-    }
-    return sock;
+    // char httpHeader[8000] = "HTTP/1.1 200 OK\r\n\n";
+    strcat(httpHeader, responseData);
 }
- 
-#define BUFFER_SIZE 1024
 
-int main(int argc, char *argv[]){
-    int fd;
-    char buffer[BUFFER_SIZE];
+int main(void)
+{
+    char httpHeader[8000] = "HTTP/1.1 200 OK\r\n\n";
 
-    if(argc < 3){
-        fprintf(stderr, "Usage: %s <hostname> <port>\n", argv[0]);
-        exit(1); 
+    // Socket setup: creates an endpoint for communication, returns a descriptor
+    // -----------------------------------------------------------------------------------------------------------------
+    int serverSocket = socket(
+        AF_INET,      // Domain: specifies protocol family
+        SOCK_STREAM,  // Type: specifies communication semantics
+        0             // Protocol: 0 because there is a single protocol for the specified family
+    );
+
+    // Construct local address structure
+    // -----------------------------------------------------------------------------------------------------------------
+    struct sockaddr_in serverAddress;
+    serverAddress.sin_family = AF_INET;
+    serverAddress.sin_port = htons(8001);
+    serverAddress.sin_addr.s_addr = htonl(INADDR_LOOPBACK);//inet_addr("127.0.0.1");
+
+    // Bind socket to local address
+    // -----------------------------------------------------------------------------------------------------------------
+    // bind() assigns the address specified by serverAddress to the socket
+    // referred to by the file descriptor serverSocket.
+    bind(
+        serverSocket,                         // file descriptor referring to a socket
+        (struct sockaddr *) &serverAddress,   // Address to be assigned to the socket
+        sizeof(serverAddress)                 // Size (bytes) of the address structure
+    );
+
+    // Mark socket to listen for incoming connections
+    // -----------------------------------------------------------------------------------------------------------------
+    int listening = listen(serverSocket, BACKLOG);
+    if (listening < 0) {
+        printf("Error: The server is not listening.\n");
+        return 1;
     }
-       
-    fd = socket_connect(argv[1], atoi(argv[2])); 
-    write(fd, "GET /\r\n", strlen("GET /\r\n")); // write(fd, char[]*, len);  
-    bzero(buffer, BUFFER_SIZE);
-    
-    while(read(fd, buffer, BUFFER_SIZE - 1) != 0){
-        fprintf(stderr, "%s", buffer);
-        bzero(buffer, BUFFER_SIZE);
+    report(&serverAddress);     // Custom report function
+    setHttpHeader(httpHeader);  // Custom function to set header
+    int clientSocket;
+
+    // Wait for a connection, create a connected socket if a connection is pending
+    // -----------------------------------------------------------------------------------------------------------------
+    while(1) {
+        clientSocket = accept(serverSocket, NULL, NULL);
+        send(clientSocket, httpHeader, sizeof(httpHeader), 0);
+        close(clientSocket);
     }
-
-    shutdown(fd, SHUT_RDWR); 
-    close(fd); 
-
     return 0;
+}
+
+void report(struct sockaddr_in *serverAddress)
+{
+    char hostBuffer[INET6_ADDRSTRLEN];
+    char serviceBuffer[NI_MAXSERV]; // defined in `<netdb.h>`
+    socklen_t addr_len = sizeof(*serverAddress);
+    int err = getnameinfo(
+        (struct sockaddr *) serverAddress,
+        addr_len,
+        hostBuffer,
+        sizeof(hostBuffer),
+        serviceBuffer,
+        sizeof(serviceBuffer),
+        NI_NUMERICHOST
+    );
+    if (err != 0) {
+        printf("It's not working!!\n");
+    }
+    printf("\n\n\tServer listening on http://%s:%s\n", hostBuffer, serviceBuffer);
 }
