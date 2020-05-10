@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
 {
     int hSocket, read_size;
     struct sockaddr_in server;
-    char SendToServer[100] = {0};
+    //char SendToServer[100] = {0};
     char server_reply[200] = {0};
 
     //Create socket
@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
 
     printf("Sucessfully conected with server\n");
     printf("Enter the Message: ");
-    SendToServer = "hello aticleworld.com"
+    char SendToServer[] = "hello aticleworld.com";
 
     //Send data to the server
     SocketSend(hSocket, SendToServer, strlen(SendToServer));
