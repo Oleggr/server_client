@@ -73,8 +73,7 @@ int main(int argc, char *argv[])
         struct sockaddr_in addr;
         socklen_t addr_size = sizeof(struct sockaddr_in);
 	    int res = getpeername(sock, (struct sockaddr *)&addr, &addr_size);
-	    char *clientip = new char[20];
-	    strcpy(clientip, inet_ntoa(addr.sin_addr));
+	    char clientip[] = inet_ntoa(addr.sin_addr);
 	    printf("Client IP: ");
 	    printf(clientip);
         //printf("Client IP address is: %s\n", inet_ntoa(client_addr.sin_addr));
