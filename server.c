@@ -1,91 +1,65 @@
-#include<stdio.h>
-#include<string.h>
-#include<sys/socket.h>
-#include<arpa/inet.h>
-#include<unistd.h>
-short SocketCreate(void)
-{
-    short hSocket;
-    printf("Create the socket\n");
-    hSocket = socket(AF_INET, SOCK_STREAM, 0);
-    return hSocket;
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+
+#include <netinet/tcp.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <netdb.h>
+
+int socket_connect(char *host, in_port_t port){
+    struct hostent *hp;
+    struct sockaddr_in addr;
+    int on = 1, sock;     
+
+    if((hp = gethostbyname(host)) == NULL){
+        herror("gethostbyname");
+        exit(1);
+    }
+    copy(hp->h_addr, &addr.sin_addr, hp->h_length);
+    addr.sin_port = htons(port);
+    addr.sin_family = AF_INET;
+    sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+    setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (const char *)&on, sizeof(int));
+
+    if(sock == -1){
+        perror("setsockopt");
+        exit(1);
+    }
+    
+    if(connect(sock, (struct sockaddr *)&addr, sizeof(struct sockaddr_in)) == -1){
+        perror("connect");
+        exit(1);
+
+    }
+    return sock;
 }
-int BindCreatedSocket(int hSocket)
-{
-    int iRetval=-1;
-    int ClientPort = 90190;
-    struct sockaddr_in  remote= {0};
-    /* Internet address family */
-    remote.sin_family = AF_INET;
-    /* Any incoming interface */
-    remote.sin_addr.s_addr = htonl(INADDR_ANY);
-    remote.sin_port = htons(ClientPort); /* Local port */
-    iRetval = bind(hSocket,(struct sockaddr *)&remote,sizeof(remote));
-    return iRetval;
-}
-int main(int argc, char *argv[])
-{
-    int socket_desc, sock, clientLen, read_size;
-    struct sockaddr_in server, client;
-    char client_message[200]= {0};
-    char message[100] = {0};
-    const char *pMessage = "hello aticleworld.com";
-    //Create socket
-    socket_desc = SocketCreate();
-    if (socket_desc == -1)
-    {
-        printf("Could not create socket");
-        return 1;
+ 
+#define BUFFER_SIZE 1024
+
+int main(int argc, char *argv[]){
+    int fd;
+    char buffer[BUFFER_SIZE];
+
+    if(argc < 3){
+        fprintf(stderr, "Usage: %s <hostname> <port>\n", argv[0]);
+        exit(1); 
     }
-    printf("Socket created\n");
-    //Bind
-    if( BindCreatedSocket(socket_desc) < 0)
-    {
-        //print the error message
-        perror("bind failed.");
-        return 1;
+       
+    fd = socket_connect(argv[1], atoi(argv[2])); 
+    write(fd, "GET /\r\n", strlen("GET /\r\n")); // write(fd, char[]*, len);  
+    bzero(buffer, BUFFER_SIZE);
+    
+    while(read(fd, buffer, BUFFER_SIZE - 1) != 0){
+        fprintf(stderr, "%s", buffer);
+        bzero(buffer, BUFFER_SIZE);
     }
-    printf("bind done\n");
-    //Listen
-    listen(socket_desc, 3);
-    //Accept and incoming connection
-    while(1)
-    {
-        printf("Waiting for incoming connections...\n");
-        clientLen = sizeof(struct sockaddr_in);
-        //accept connection from an incoming client
-        sock = accept(socket_desc,(struct sockaddr *)&client,(socklen_t*)&clientLen);
-        if (sock < 0)
-        {
-            perror("accept failed");
-            return 1;
-        }
-        printf("Connection accepted\n");
-        memset(client_message, '\0', sizeof client_message);
-        memset(message, '\0', sizeof message);
-        //Receive a reply from the client
-        if( recv(sock, client_message, 200, 0) < 0)
-        {
-            printf("recv failed");
-            break;
-        }
-        printf("Client reply : %s\n",client_message);
-        if(strcmp(pMessage,client_message)==0)
-        {
-            strcpy(message,"Hi there !");
-        }
-        else
-        {
-            strcpy(message,"Invalid Message !");
-        }
-        // Send some data
-        if( send(sock, message, strlen(message), 0) < 0)
-        {
-            printf("Send failed");
-            return 1;
-        }
-        close(sock);
-        sleep(1);
-    }
+
+    shutdown(fd, SHUT_RDWR); 
+    close(fd); 
+
     return 0;
 }
