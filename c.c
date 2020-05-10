@@ -90,7 +90,9 @@ int main(int argc, char *argv[])
     }
 
     printf("Sucessfully conected with server\n");
-    printf("Enter the Message: ");
+
+    
+    
     char SendToServer[] = "hello aticleworld.com";
 
     //Send data to the server

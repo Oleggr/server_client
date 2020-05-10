@@ -69,6 +69,8 @@ int main(int argc, char *argv[])
             return 1;
         }
         printf("Connection accepted\n");
+        printf("Client IP address is: %s\n", inet_ntoa(client_addr.sin_addr));
+
         memset(client_message, '\0', sizeof client_message);
         memset(message, '\0', sizeof message);
         //Receive a reply from the client
