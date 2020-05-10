@@ -3,6 +3,8 @@
 #include<sys/socket.h>
 #include<arpa/inet.h>
 #include<unistd.h>
+
+
 short SocketCreate(void)
 {
     short hSocket;
@@ -10,10 +12,12 @@ short SocketCreate(void)
     hSocket = socket(AF_INET, SOCK_STREAM, 0);
     return hSocket;
 }
+
+
 int BindCreatedSocket(int hSocket)
 {
     int iRetval=-1;
-    int ClientPort = 90190;
+    int ClientPort = 8080;
     struct sockaddr_in  remote= {0};
     /* Internet address family */
     remote.sin_family = AF_INET;
@@ -23,6 +27,8 @@ int BindCreatedSocket(int hSocket)
     iRetval = bind(hSocket,(struct sockaddr *)&remote,sizeof(remote));
     return iRetval;
 }
+
+
 int main(int argc, char *argv[])
 {
     int socket_desc, sock, clientLen, read_size;
@@ -30,7 +36,7 @@ int main(int argc, char *argv[])
     char client_message[200]= {0};
     char message[100] = {0};
     const char *pMessage = "hello aticleworld.com";
-    //Create socket
+
     socket_desc = SocketCreate();
     if (socket_desc == -1)
     {
@@ -38,6 +44,7 @@ int main(int argc, char *argv[])
         return 1;
     }
     printf("Socket created\n");
+
     //Bind
     if( BindCreatedSocket(socket_desc) < 0)
     {
@@ -48,6 +55,7 @@ int main(int argc, char *argv[])
     printf("bind done\n");
     //Listen
     listen(socket_desc, 3);
+
     //Accept and incoming connection
     while(1)
     {
@@ -88,4 +96,5 @@ int main(int argc, char *argv[])
         sleep(1);
     }
     return 0;
+
 }
