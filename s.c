@@ -33,8 +33,11 @@ int main(int argc, char *argv[])
 {
     int socket_desc, sock, clientLen, read_size;
     struct sockaddr_in server, client;
+    
     char client_message[200]= {0};
-    char message[100] = {0};
+    //char message[100] = {0};
+    char message[];
+    
     const char *pMessage = "hello aticleworld.com";
 
     socket_desc = SocketCreate();
@@ -83,7 +86,8 @@ int main(int argc, char *argv[])
         printf("Client reply : %s\n",client_message);
         if(strcmp(pMessage,client_message)==0)
         {
-            strcpy(message,"Hi there !");
+            //strcpy(message,"Hi there !");
+            message = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\nConnection: close\r\n\r\nHello, world!";
         }
         else
         {
@@ -98,6 +102,7 @@ int main(int argc, char *argv[])
         close(sock);
         sleep(1);
     }
+
     return 0;
 
 }
