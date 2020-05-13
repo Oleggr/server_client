@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     
     char client_message[200]= {0};
     //char message[100] = {0};
-    char message[];
+    char *message = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\nConnection: close\r\n\r\nHello, world!";;
     
     const char *pMessage = "hello aticleworld.com";
 
@@ -84,15 +84,16 @@ int main(int argc, char *argv[])
             break;
         }
         printf("Client reply : %s\n",client_message);
+        /*
         if(strcmp(pMessage,client_message)==0)
         {
-            //strcpy(message,"Hi there !");
-            message = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\nConnection: close\r\n\r\nHello, world!";
+            strcpy(message,"Hi there !");
         }
         else
         {
             strcpy(message,"Invalid Message !");
         }
+        */
         // Send some data
         if( send(sock, message, strlen(message), 0) < 0)
         {
