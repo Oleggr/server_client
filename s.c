@@ -70,15 +70,8 @@ int main(int argc, char *argv[])
         }
         printf("Connection accepted\n");
 
-        struct sockaddr_in addr;
-        socklen_t addr_size = sizeof(struct sockaddr_in);
-	    int res = getpeername(sock, (struct sockaddr *)&addr, &addr_size);
-	    char *clientip;
-	    strcpy(clientip, inet_ntoa(addr.sin_addr));
-	    printf("Client IP: ");
-	    printf(clientip);
-        //printf("Client IP address is: %s\n", inet_ntoa(client_addr.sin_addr));
 
+        //printf("Client IP address is: %s\n", inet_ntoa(client_addr.sin_addr));
         memset(client_message, '\0', sizeof client_message);
         memset(message, '\0', sizeof message);
         //Receive a reply from the client
