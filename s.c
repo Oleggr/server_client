@@ -75,8 +75,8 @@ int main(int argc, char *argv[])
 
 
         //printf("Client IP address is: %s\n", inet_ntoa(client_addr.sin_addr));
-        memset(client_message, '\0', sizeof client_message);
-        memset(message, '\0', sizeof message);
+        //memset(client_message, '\0', sizeof client_message);
+        //memset(message, '\0', sizeof message);
         //Receive a reply from the client
         if( recv(sock, client_message, 200, 0) < 0)
         {
