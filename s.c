@@ -83,7 +83,12 @@ int main(int argc, char *argv[])
             printf("recv failed");
             break;
         }
-        printf("Client reply : %s\n",client_message);
+        //printf("Client reply : %s\n",client_message);
+        int counter = 0;
+        for (counter = 0; counter < 200; ++counter){
+            printf(client_message[counter])
+            printf(" ");
+        }
         /*
         if(strcmp(pMessage,client_message)==0)
         {
