@@ -38,8 +38,8 @@ int main(int argc, char *argv[])
     //char message[100] = {0};
     char *message = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\nConnection: close\r\n\r\nHello, world!";;
     char *auth_token = "token_value";
-    
-    const char *pMessage = "hello aticleworld.com";
+
+    const char *pMessage = "Authenfication:token_value";
 
     socket_desc = SocketCreate();
     if (socket_desc == -1)
@@ -85,11 +85,16 @@ int main(int argc, char *argv[])
             break;
         }
         //printf("Client reply : %s\n",client_message);
-        int counter = 0;
-        for (counter = 0; counter < 200; ++counter){
-            printf("%c", client_message[counter]);
-            printf(" ");
-        }
+        
+
+        //int counter = 0;
+
+        // for (counter = 0; counter < 200; ++counter){
+        //     printf("%c", client_message[counter]);
+        //     printf(" ");
+        // }
+
+
         /*
         if(strcmp(pMessage,client_message)==0)
         {
@@ -101,6 +106,17 @@ int main(int argc, char *argv[])
         }
         */
         // Send some data
+
+        if(strcmp(pMessage,client_message)==0)
+        {
+            strcpy(message,"Hi there !");
+        }
+        else
+        {
+            strcpy(message,"Invalid Message !");
+        }
+
+
         if( send(sock, message, strlen(message), 0) < 0)
         {
             printf("Send failed");

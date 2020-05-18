@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
     const char *header = "Authenfication:";
     
     char Authenfication[100] = {0};// "Authenfication:" + auth_token;
-
+щ
     snprintf(Authenfication, sizeof Authenfication, "%s%s", header, auth_token);
 
     char SendToServer[] = "hello aticleworld.com";
