@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
     const char *auth_token  = "token_value";
     const char *header = "Authenfication:";
     
-    char Authenfication[100] = {0};// "Authenfication:" + auth_token;
+    char Authenfication[200] = {0};// "Authenfication:" + auth_token;
 
     snprintf(Authenfication, sizeof Authenfication, "%s%s", header, auth_token);
 
