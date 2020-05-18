@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     
     char client_message[200]= {0};
     //char message[100] = {0};
-    char *message = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\nConnection: close\r\n\r\nHello, world!";;
+    // char *message = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\nConnection: close\r\n\r\nHello, world!";
     char *auth_token = "token_value";
 
     const char *pMessage = "Authenfication:token_value";
@@ -109,11 +109,11 @@ int main(int argc, char *argv[])
 
         if(strcmp(pMessage,client_message)==0)
         {
-            strcpy(message,"Hi there !");
+            char *message = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\nConnection: close\r\n\r\nHello, world!";
         }
         else
         {
-            strcpy(message,"Invalid Message !");
+            char *message = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\nConnection: close\r\n\r\nWrong token!";
         }
 
 
