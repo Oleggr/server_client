@@ -38,9 +38,14 @@ int main(int argc, char *argv[])
     //char message[100] = {0};
     // char *message = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\nConnection: close\r\n\r\nHello, world!";
     char *message;
-    char *auth_token = "token_value";
+    
 
-    const char *pMessage = "Authenfication:token_value";
+    const char *auth_header = "Authenfication:";
+    const char *auth_token  = "Ae*%$3s8ac";
+    char Authenfication[200] = {0};// "Authenfication:" + auth_token;
+    snprintf(Authenfication, sizeof Authenfication, "%s%s", header, auth_token);
+
+    //const char *pMessage = "Authenfication:token_value";
 
     socket_desc = SocketCreate();
     if (socket_desc == -1)
@@ -108,7 +113,7 @@ int main(int argc, char *argv[])
         */
         // Send some data
 
-        if(strcmp(pMessage,client_message)==0)
+        if(strcmp(Authenfication,client_message)==0)
         {
              message = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\nConnection: close\r\n\r\nHello, world!";
         }

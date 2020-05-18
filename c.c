@@ -91,9 +91,21 @@ int main(int argc, char *argv[])
 
     printf("Sucessfully conected with server\n");
 
+    const char *auth_header = "Authenfication:";
+    const char *auth_token  = "Ae*%$3s8ac"; // 10 characters
 
-    const char *auth_token  = "token_value";
-    const char *header = "Authenfication:";
+    const char *str_header = "Str_param:";
+    const char *int_header = "Int_param:";
+
+    int num; 
+    char ch;
+
+    printf("Enter the integer: "); 
+    scanf("%d", &num);
+
+    printf("\n\nEnter the character: "); 
+    scanf("%c", &ch); 
+        
     
     char Authenfication[200] = {0};// "Authenfication:" + auth_token;
 
