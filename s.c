@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
 
     const char *auth_header = "Authenfication:";
     const char *auth_token  = "Ae*%$3s8ac";
+    char *client_token;
     char Authenfication[200] = {0};// "Authenfication:" + auth_token;
     snprintf(Authenfication, sizeof Authenfication, "%s%s", auth_header, auth_token);
 
@@ -93,25 +94,13 @@ int main(int argc, char *argv[])
         printf("Client reply : %s\n",client_message);
         
 
-        //int counter = 0;
+        // char *start_auth;
+        // start_auth = strstr (client_message,auth_header);
+        // if (start_auth == NULL)
+        //     message = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\nConnection: close\r\n\r\nToken is missed!";
+        // else
+        //     client_token = 
 
-        // for (counter = 0; counter < 200; ++counter){
-        //     printf("%c", client_message[counter]);
-        //     printf(" ");
-        // }
-
-
-        /*
-        if(strcmp(pMessage,client_message)==0)
-        {
-            strcpy(message,"Hi there !");
-        }
-        else
-        {
-            strcpy(message,"Invalid Message !");
-        }
-        */
-        // Send some data
 
         if(strcmp(Authenfication,client_message)==0)
         {
