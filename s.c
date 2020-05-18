@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
         //printf("Client reply : %s\n",client_message);
         int counter = 0;
         for (counter = 0; counter < 200; ++counter){
-            printf(client_message[counter])
+            printf(client_message[counter]);
             printf(" ");
         }
         /*
