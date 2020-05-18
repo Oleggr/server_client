@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
     
     char Authenfication[200] = {0};// "Authenfication:" + auth_token;
 
-    snprintf(Authenfication, sizeof Authenfication, "%s%s", header, auth_token);
+    snprintf(Authenfication, sizeof Authenfication, "%s%s", auth_header, auth_token);
 
     char SendToServer[] = "hello aticleworld.com";
 

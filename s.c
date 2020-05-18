@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     const char *auth_header = "Authenfication:";
     const char *auth_token  = "Ae*%$3s8ac";
     char Authenfication[200] = {0};// "Authenfication:" + auth_token;
-    snprintf(Authenfication, sizeof Authenfication, "%s%s", header, auth_token);
+    snprintf(Authenfication, sizeof Authenfication, "%s%s", auth_header, auth_token);
 
     //const char *pMessage = "Authenfication:token_value";
 
