@@ -37,6 +37,7 @@ int main(int argc, char *argv[])
     char client_message[200]= {0};
     //char message[100] = {0};
     char *message = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\nConnection: close\r\n\r\nHello, world!";;
+    char *auth_token = "token_value";
     
     const char *pMessage = "hello aticleworld.com";
 

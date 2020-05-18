@@ -60,7 +60,7 @@ int SocketReceive(int hSocket,char* Rsp,short RvcSize)
         return -1;
     }
     shortRetval = recv(hSocket, Rsp, RvcSize, 0);
-    printf("Response %s\n",Rsp);
+    //printf("Response %s\n",Rsp);
     return shortRetval;
 }
 
@@ -91,12 +91,21 @@ int main(int argc, char *argv[])
 
     printf("Sucessfully conected with server\n");
 
+
+    const char *auth_token  = "token_value";
+    const char *header = "Authenfication:";
     
-    
+    char Authenfication[100] = {0};// "Authenfication:" + auth_token;
+
+    snprintf(Authenfication, sizeof Authenfication, "%s%s", header, auth_token);
+
     char SendToServer[] = "hello aticleworld.com";
 
     //Send data to the server
-    SocketSend(hSocket, SendToServer, strlen(SendToServer));
+   // SocketSend(hSocket, SendToServer, strlen(SendToServer));
+    SocketSend(hSocket, Authenfication, strlen(Authenfication));
+   
+
     //Received the data from the server
     read_size = SocketReceive(hSocket, server_reply, 200);
     printf("Server Response : %s\n\n",server_reply);
