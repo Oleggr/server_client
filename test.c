@@ -27,7 +27,7 @@ int main(void)
 	printf("\n---\n");
 
 
-	printf(Request[0]);
+	printf("%c", Request[0]);
 	// int i;
 	// for (i = 0; i<200; ++i) {
 	// 	printf(Request[i]);
