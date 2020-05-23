@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
 
     printf("Sucessfully conected with server\n");
 
-    const char *http_header = "GET / HTTP/1.1"
+    const char *http_header = "GET / HTTP/1.1";
     const char *auth_header = "\nAuthenfication:";
     const char *auth_token  = "Ae*%$3s8ac"; // 10 characters
 

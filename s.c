@@ -37,7 +37,6 @@ int main(int argc, char *argv[])
     char client_message[200]= {0};
     //char message[100] = {0};
     // char *message = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\nConnection: close\r\n\r\nHello, world!";
-    char *message;
     
 
     const char *auth_header = "Authenfication:";
@@ -102,21 +101,26 @@ int main(int argc, char *argv[])
         //     client_token = 
 
 
-        if(strcmp(Authenfication,client_message)==0)
-        {
-             message = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\nConnection: close\r\n\r\nHello, world!";
-        }
-        else
-        {
-            message = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\nConnection: close\r\n\r\nWrong token!";
-        }
 
+        // char *message;
+        // if(strcmp(Authenfication,client_message)==0)
+        // {
+        //     message = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\nConnection: close\r\n\r\nHello, world!";
+        // }
+        // else
+        // {
+        //     message = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\nConnection: close\r\n\r\nWrong token!";
+        // }
+        char message[] = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\nConnection: close\r\n\r\nHello, world!";
 
-        if( send(sock, message, strlen(message), 0) < 0)
-        {
-            printf("Send failed");
-            return 1;
-        }
+        int sent;
+        for (sent = 0; sent < sizeof(message); sent += send(sock, message+sent, sizeof(message)-sent, 0));
+
+        // if( send(sock, message, strlen(message), 0) < 0)
+        // {
+        //     printf("Send failed");
+        //     return 1;
+        // }
         close(sock);
         sleep(1);
     }
