@@ -1,6 +1,13 @@
 # check line length for content length
 
-line = "<html><head><title>Hello</title></head><body><form method=\"post\">str_param:<input maxlength=\"25\" size=\"40\" name=\"str_param\"/>token:<input maxlength=\"25\" size=\"40\" name=\"token\"/><br><input name=\"\" type=\"submit\" value=\"send\"/></form></body></html>"
+#line = "<html><head><title>Error</title></head><body>Uncorrect request type. Only GET and POST are acceptable.</body></html>"
+# line = "<html><head><title>Authorized</title></head><body>Token value is correct</body></html>"
+
+line = "HTTP/1.1 200 OK\r\nContent-Type: text/html;\r\nContent-Length: 86\r\nConnection: close\r\n\r\n<html><head><title>Authorized</title></head><body>Token value is correct<br>Current param value: param value aaaaa</body></html>"
+
+# str_param=124&token=token_value
+# '''
+
 counter = 0
 
 for symbol in line:
