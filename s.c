@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
 
         if (strcmp(request_type, "GET") == 0) {
             // char message[] = "HTTP/1.1 200 OK\r\nContent-Type: text/html;\r\nContent-Length: 249\r\nConnection: close\r\n\r\n<html><head><title>Hello</title></head><body><form method=\"post\">str_param:<input maxlength=\"25\" size=\"40\" name=\"str_param\"/><br>token:<input maxlength=\"25\" size=\"40\" name=\"token\"/><br><input name=\"\" type=\"submit\" value=\"send\"/></form></body></html>";
-            char message[] = "HTTP/1.1 200 OK\r\nContent-Type: text/html;\r\nConnection: close\r\n\r\n<html><head><title>Hello</title></head><body><form method=\"post\">int_param:<input maxlength=\"10\" size=\"20\" name=\"int_param\"/><br>str_param:<input maxlength=\"10\" size=\"20\" name=\"str_param\"/><br>token:<input maxlength=\"10\" size=\"20\" name=\"token\"/><br><input type=\"hidden\" name=\"debugfield\" value=\"1\"><input name=\"\" type=\"submit\" value=\"send\"/></form></body></html>";
+            char message[] = "HTTP/1.1 200 OK\r\nContent-Type: text/html;\r\nConnection: close\r\n\r\n<html><head><title>Hello</title></head><body><form method=\"post\">int_param:<input maxlength=\"9\" size=\"20\" name=\"int_param\"/><br>str_param:<input maxlength=\"9\" size=\"20\" name=\"str_param\"/><br>token:<input maxlength=\"9\" size=\"20\" name=\"token\"/><br><input type=\"hidden\" name=\"debugfield\" value=\"1\"><input name=\"\" type=\"submit\" value=\"send\"/></form></body></html>";
             int sent;
             for (sent = 0; sent < sizeof(message); sent += send(sock, message+sent, sizeof(message)-sent, 0));
         }
